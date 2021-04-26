@@ -17,6 +17,8 @@ type token = Int_tok of int
             | Lparen_tok
             | Rparen_tok
             | Power_tok
+            | Exit_tok
+            | Col_tok
             ;;
 
 type assoc = Left | Right;;
@@ -43,6 +45,8 @@ Int_tok x -> Printf.printf "Int_tok %d" x
 | Lparen_tok -> print_string "Lparen_tok"
 | Rparen_tok -> print_string "Rparen_tok"
 | Power_tok -> print_string "Power_tok"
+| Exit_tok -> print_string "Exit_tok"
+| Col_tok -> print_string "Col_tok"
 | _ -> raise IgnoreCase;;
 
 (* Give priority to operators *)
@@ -65,6 +69,7 @@ let int_bool_val = fun b ->
   if b = true then 1
   else 0;;
 
+(* Return integer value for boolean *)
 let float_bool_val = fun b ->
   if b = true then 1.
   else 0.;;
@@ -196,7 +201,7 @@ let pop = fun lst ->
 (* Pop list until Lparen token is seen *)
 let rec pop_till_lparen = fun lst ->
   match lst with
-  [] -> []
+  [] -> raise (InvalidExpression "The operation is invalid")
   | (Lparen_tok)::xs -> xs
   | x::xs -> pop_till_lparen xs;;
 
@@ -258,13 +263,13 @@ let get_rpn = fun expn -> fun symtable ->
     | x::xs when (is_op x) -> 
       (* let _, _ = print_token x, print_string "\n" in  *)
       get_rpn xs (x::op_list) rpn_list symtable
-    | (Id_tok x)::xs -> get_rpn xs op_list (rpn_list @ [lookup symtable x]) symtable
+    | (Id_tok x)::xs -> get_rpn xs op_list (rpn_list @ [lookup symtable (Id_tok x)]) symtable
     | x::xs -> let _ = print_token x in raise IgnoreCase
   in
   get_rpn expn [] [] symtable;;
 
 (* Return string of token *)
-let return_val_without_token = fun x ->
+let string_of_token = fun x ->
   match x with
   Int_tok x::[] -> string_of_int x
   | Float_tok x::[] -> string_of_float x
@@ -299,11 +304,85 @@ let eval_exp = fun exp -> fun symtable ->
   let lst = (get_rpn exp symtable) in
   (eval_rpn lst);;
 
+(* Skip until a token is found *)
+let rec skip_until = fun lst -> fun tok -> 
+  match lst with
+  [] -> raise (InvalidExpression "The expression is invalid")
+  | x::xs when (x = tok) ->  xs
+  | x::xs -> skip_until xs tok;;
+
+(* Skip everything after the token *)
+let skip_after = fun lst -> fun tok -> 
+  let rec skip_after = fun lst -> fun tok -> fun lst2 ->
+  match lst with
+  [] -> raise (InvalidExpression "The expression is invalid")
+  | x::xs when (x = tok) ->  lst2
+  | x::xs -> skip_after xs tok (lst2 @ [x])
+  in
+  skip_after lst tok [];;
+
+(* Return the first comparision token found in the list *)
+let rec get_comp_tok = fun lst ->
+  match lst with
+  [] -> raise (InvalidExpression "The expression is invalid")
+  | Is_Eq_tok::xs -> Is_Eq_tok
+  | Is_Neq_tok::xs -> Is_Neq_tok
+  | x::xs -> get_comp_tok xs;;
+
+(* This function receives list of token with if statement and evaluates them *)
+let rec evaluate_if = fun tok_list -> fun symtable ->
+  match tok_list with
+  If_tok::xs ->
+    let lhs = skip_after xs (get_comp_tok xs) in
+    let rhs = skip_after (skip_until xs (get_comp_tok xs)) (Col_tok) in 
+    (eval_exp lhs symtable) = (eval_exp rhs symtable)
+  | _ -> false;;
+
+
+let evaluate_comparision = fun tok_list -> fun symtable ->
+  let to_skip = get_comp_tok tok_list in
+  let lhs = skip_after tok_list to_skip in
+  let rhs = skip_until tok_list to_skip in
+  if (to_skip = Is_Eq_tok) then
+    if (eval_exp lhs symtable) = (eval_exp rhs symtable) then (Bool_tok true)
+    else Bool_tok false
+  else
+    if (eval_exp lhs symtable) = (eval_exp rhs symtable) then (Bool_tok false)
+    else Bool_tok true;;
+
+
 (* Assign value to the identifier *)
 let assign = fun token_lst -> fun symtable ->
   match token_lst with
   (Id_tok x)::(Equal_tok)::xs ->
-    let lhs = (Id_tok x) in
+    let lhs = Id_tok x in
     let rhs = eval_exp xs symtable in
     update symtable lhs rhs
   | _ -> raise (InvalidExpression "Invalid assignment");;
+
+
+(* Check if to exit the program *)
+let check_exit = fun tok_list -> 
+  match tok_list with
+  Exit_tok::[] -> true
+  | _ -> false;;
+
+(* Check if the list of token is an expression *)
+let is_expression = fun tok_list ->
+  match tok_list with
+  [] -> false
+  | _ -> true;;
+
+(* Check if the statement is comparision *)
+let rec is_comparision = fun tok_lst ->
+  match tok_lst with
+  [] -> false
+  | Is_Eq_tok::xs -> true
+  | Is_Neq_tok::xs -> true
+  | x::xs -> is_comparision xs;;
+
+(* Check if thoken list is an if statement *)
+let is_if_statement = fun tok_list ->
+  match tok_list with
+  If_tok::xs -> true
+  | _ -> false

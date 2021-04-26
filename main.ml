@@ -2,13 +2,25 @@
 
 #use "lexer.mml.ml";;
 
-(* let rec main = fun x -> 
-  match x with
-    0 -> read_line ()
-    | _ ->  let _ = print_tokens (tokenize (read_line())) in main (x -1);;
+let symtable = Hashtbl.create 10;;
 
-main 100;; *)
-let s = read_line ();;
-let s = get_rpn (tokenize s);;
-let r = eval_rpn s;;
-print_string r;;
+let rec main = fun tok_list ->
+  let s = if (size tok_list > 0) then tok_list else let _ = print_string ">>> " in tokenize (read_line ()) in
+  match s with
+  _ when (check_exit s) -> print_string ""
+  | x::xs when (is_if_statement [x]) -> if (evaluate_if (x::xs) symtable) then main (skip_until (x::xs) Col_tok) else main []
+  | _ when (is_comparision s) -> let _ = Printf.printf "%s\n" (string_of_token [evaluate_comparision s symtable]) in main []
+  | _ when (is_assginment s) -> let _ = assign s symtable in main []
+  | _ when (is_expression s) -> let _ = Printf.printf "%s\n" (string_of_token([eval_exp s symtable])) in main []
+  | _ -> main [];;
+  (* if check_exit s then print_string ""
+  else if (is_newline s) then main()
+  else
+    (
+      try
+        if (is_assginment s) then let _ = assign s symtable in main ()
+        else let _ = print_string (string_of_token([eval_exp s symtable]))
+      with Not_found -> main ()
+    );; *)
+
+main [];;

@@ -18,6 +18,7 @@ let id = ['a'-'z' 'A'-'Z' '_'] ['a'-'z' 'A'-'Z' '0'-'9' '_']*
 let Uminus = "-" digits
 let UPlus = "+" digits
 let scientific = digits "e" digits | digits "e" "-" digits | "-" digits "e" digits | "-" digits "e" "-" digits
+let exit = "exit()"
 
 
 rule lexer = parse
@@ -43,6 +44,8 @@ rule lexer = parse
         | "**"                          { Power_tok :: lexer lexbuf }
         | "True"                        { Bool_tok true :: lexer lexbuf }
         | "False"                       { Bool_tok false :: lexer lexbuf }
+        | ":"                           { Col_tok :: lexer lexbuf }
+        | exit                          { Exit_tok :: lexer lexbuf }
         | id as i                       { Id_tok i :: lexer lexbuf }
         | eof                           { [] }
         | _                             { lexer lexbuf } 
