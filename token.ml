@@ -201,7 +201,7 @@ let pop = fun lst ->
 (* Pop list until Lparen token is seen *)
 let rec pop_till_lparen = fun lst ->
   match lst with
-  [] -> raise (InvalidExpression "The operation is invalid")
+  [] -> raise (InvalidExpression "The expression is invalid")
   | (Lparen_tok)::xs -> xs
   | x::xs -> pop_till_lparen xs;;
 
