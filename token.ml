@@ -333,10 +333,15 @@ let rec get_comp_tok = fun lst ->
 let rec evaluate_if = fun tok_list -> fun symtable ->
   match tok_list with
   If_tok::xs ->
-    let lhs = skip_after xs (get_comp_tok xs) in
-    let rhs = skip_after (skip_until xs (get_comp_tok xs)) (Col_tok) in 
-    (eval_exp lhs symtable) = (eval_exp rhs symtable)
-  | _ -> false;;
+    let to_skip = get_comp_tok xs in 
+    let lhs = skip_after xs to_skip in
+    let rhs = skip_after (skip_until xs to_skip) (Col_tok) in 
+    if (to_skip = Is_Eq_tok) then
+      if (eval_exp lhs symtable) = (eval_exp rhs symtable) then true
+      else false
+    else
+      if (eval_exp lhs symtable) = (eval_exp rhs symtable) then false
+      else true;;
 
 
 let evaluate_comparision = fun tok_list -> fun symtable ->
