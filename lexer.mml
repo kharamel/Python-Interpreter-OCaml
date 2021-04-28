@@ -35,7 +35,11 @@ rule lexer = parse
         | "*"                           { Times_tok :: lexer lexbuf } 
         | "/"                           { Div_tok :: lexer lexbuf }
         | "=="                          { Is_Eq_tok :: lexer lexbuf } 
-        | "!="                          { Is_Neq_tok :: lexer lexbuf } 
+        | "!="                          { Is_Neq_tok :: lexer lexbuf }
+        | "<"                           { Less_tok :: lexer lexbuf }
+        | ">"                           { Greater_tok :: lexer lexbuf }
+        | "<="                          { Leq_tok :: lexer lexbuf }
+        | ">="                          { Geq_tok :: lexer lexbuf }
         | "="                           { Equal_tok :: lexer lexbuf } 
         | "if"                          { If_tok :: lexer lexbuf }
         | "else"                        { Else_tok :: lexer lexbuf } 

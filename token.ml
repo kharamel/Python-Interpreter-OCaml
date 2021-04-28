@@ -11,6 +11,10 @@ type token = Int_tok of int
             | Div_tok
             | Is_Eq_tok
             | Is_Neq_tok
+            | Less_tok
+            | Greater_tok
+            | Leq_tok
+            | Geq_tok
             | Equal_tok
             | If_tok
             | Else_tok
@@ -327,22 +331,11 @@ let rec get_comp_tok = fun lst ->
   [] -> raise (InvalidExpression "The expression is invalid")
   | Is_Eq_tok::xs -> Is_Eq_tok
   | Is_Neq_tok::xs -> Is_Neq_tok
+  | Less_tok::xs -> Less_tok
+  | Greater_tok::xs -> Greater_tok
+  | Leq_tok::xs -> Leq_tok
+  | Geq_tok::xs -> Geq_tok
   | x::xs -> get_comp_tok xs;;
-
-(* This function receives list of token with if statement and evaluates them *)
-let rec evaluate_if = fun tok_list -> fun symtable ->
-  match tok_list with
-  If_tok::xs ->
-    let to_skip = get_comp_tok xs in 
-    let lhs = skip_after xs to_skip in
-    let rhs = skip_after (skip_until xs to_skip) (Col_tok) in 
-    if (to_skip = Is_Eq_tok) then
-      if (eval_exp lhs symtable) = (eval_exp rhs symtable) then true
-      else false
-    else
-      if (eval_exp lhs symtable) = (eval_exp rhs symtable) then false
-      else true;;
-
 
 let evaluate_comparision = fun tok_list -> fun symtable ->
   let to_skip = get_comp_tok tok_list in
@@ -351,9 +344,50 @@ let evaluate_comparision = fun tok_list -> fun symtable ->
   if (to_skip = Is_Eq_tok) then
     if (eval_exp lhs symtable) = (eval_exp rhs symtable) then (Bool_tok true)
     else Bool_tok false
-  else
+  else if (to_skip = Is_Neq_tok) then
     if (eval_exp lhs symtable) = (eval_exp rhs symtable) then (Bool_tok false)
-    else Bool_tok true;;
+    else Bool_tok true
+  else if (to_skip = Less_tok) then
+    if (eval_exp lhs symtable) < (eval_exp rhs symtable) then (Bool_tok true)
+    else Bool_tok false
+  else if (to_skip = Greater_tok) then
+    if (eval_exp lhs symtable) > (eval_exp rhs symtable) then (Bool_tok true)
+    else Bool_tok false
+  else if (to_skip = Leq_tok) then
+    if (eval_exp lhs symtable) <= (eval_exp rhs symtable) then (Bool_tok true)
+    else Bool_tok false
+  else
+    if (eval_exp lhs symtable) >= (eval_exp rhs symtable) then (Bool_tok true)
+    else Bool_tok false;;
+
+(* This function receives list of token with if statement and evaluates them *)
+let rec evaluate_if = fun tok_list -> fun symtable ->
+  match tok_list with
+  If_tok::xs -> 
+    let ans = evaluate_comparision (skip_after xs Col_tok) symtable in
+    if ans = Bool_tok true then true
+    else false
+    (* let to_skip = get_comp_tok xs in 
+    let lhs = skip_after xs to_skip in
+    let rhs = skip_after (skip_until xs to_skip) (Col_tok) in 
+    if (to_skip = Is_Eq_tok) then
+      if (eval_exp lhs symtable) = (eval_exp rhs symtable) then true
+      else false
+    else if (to_skip = Is_Neq_tok) then
+      if (eval_exp lhs symtable) <> (eval_exp rhs symtable) then true
+      else false
+    else if (to_skip = Less_tok) then
+      if (eval_exp lhs symtable) < (eval_exp rhs symtable) then true
+      else false
+    else if (to_skip = Greater_tok) then
+      if (eval_exp lhs symtable) > (eval_exp rhs symtable) then true
+      else false
+    else if (to_skip = Leq_tok) then
+      if (eval_exp lhs symtable) <= (eval_exp rhs symtable) then true
+      else false
+    else
+      if (eval_exp lhs symtable) >= (eval_exp rhs symtable) then false
+      else true;; *)
 
 
 (* Assign value to the identifier *)
@@ -384,6 +418,10 @@ let rec is_comparision = fun tok_lst ->
   [] -> false
   | Is_Eq_tok::xs -> true
   | Is_Neq_tok::xs -> true
+  | Less_tok::xs -> true
+  | Greater_tok::xs -> true
+  | Leq_tok::xs -> true
+  | Geq_tok::xs -> true
   | x::xs -> is_comparision xs;;
 
 (* Check if thoken list is an if statement *)
