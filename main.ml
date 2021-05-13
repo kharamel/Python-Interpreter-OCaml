@@ -13,11 +13,11 @@ let rec main = fun tok_list -> fun n ->
     let n = n + 1 in
     let _ = indent n in
     let to_eval = read_line() in 
-    if (evaluate_if (x::xs) symtable) then main (tokenize to_eval) n else main [] n
-  | _ when (is_comparision s) -> let _ = Printf.printf "%s\n" (string_of_token [evaluate_comparision s symtable]) in main [] n
+    if (evaluate_if (x::xs) symtable) then main (tokenize to_eval) n else main [] 0
+  | _ when (is_comparision s) -> let _ = Printf.printf "%s\n" (string_of_token [evaluate_comparision s symtable]) in main [] 0
   | _ when (is_assginment s) -> let _ = assign s symtable in main [] n
-  | _ when (is_expression s) -> let _ = Printf.printf "%s\n" (string_of_token([eval_exp s symtable])) in main [] n
-  | _ -> main [] n
+  | _ when (is_expression s) -> let _ = Printf.printf "%s\n" (string_of_token([eval_exp s symtable])) in main [] 0
+  | _ -> main [] 0
   with
   | InvalidExpression msg -> let _ = Printf.printf "%s\n" msg in main [] 0
   | Not_found -> let _ = Printf.printf "Unassigned variable(s)\n" in main [] 0
