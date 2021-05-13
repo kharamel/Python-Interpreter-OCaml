@@ -1,4 +1,4 @@
-# 3 "lexer.mml"
+# 5 "lexer.mml"
  
 
 #use "token.ml";;
@@ -526,196 +526,196 @@ and __ocaml_lex_lexer_rec lexbuf __ocaml_lex_state =
   match Lexing.engine __ocaml_lex_tables __ocaml_lex_state lexbuf with
       | 0 ->
 let
-# 25 "lexer.mml"
+# 27 "lexer.mml"
                               f
 # 532 "lexer.mml.ml"
 = Lexing.sub_lexeme lexbuf lexbuf.Lexing.lex_start_pos lexbuf.Lexing.lex_curr_pos in
-# 25 "lexer.mml"
+# 27 "lexer.mml"
                                         ( Float_tok (float_of_string f) :: lexer lexbuf )
 # 536 "lexer.mml.ml"
 
   | 1 ->
 let
-# 26 "lexer.mml"
+# 28 "lexer.mml"
                     n
 # 542 "lexer.mml.ml"
 = Lexing.sub_lexeme lexbuf lexbuf.Lexing.lex_start_pos lexbuf.Lexing.lex_curr_pos in
-# 26 "lexer.mml"
+# 28 "lexer.mml"
                                         ( Int_tok (int_of_string n) :: lexer lexbuf )
 # 546 "lexer.mml.ml"
 
   | 2 ->
-# 27 "lexer.mml"
+# 29 "lexer.mml"
                                         ( comment1 lexbuf )
 # 551 "lexer.mml.ml"
 
   | 3 ->
 let
-# 28 "lexer.mml"
+# 30 "lexer.mml"
                                 f
 # 557 "lexer.mml.ml"
 = Lexing.sub_lexeme lexbuf lexbuf.Lexing.lex_start_pos lexbuf.Lexing.lex_curr_pos in
-# 28 "lexer.mml"
+# 30 "lexer.mml"
                                         ( Float_tok (float_of_string f) :: lexer lexbuf )
 # 561 "lexer.mml.ml"
 
   | 4 ->
 let
-# 29 "lexer.mml"
+# 31 "lexer.mml"
                                f
 # 567 "lexer.mml.ml"
 = Lexing.sub_lexeme lexbuf lexbuf.Lexing.lex_start_pos lexbuf.Lexing.lex_curr_pos in
-# 29 "lexer.mml"
+# 31 "lexer.mml"
                                         ( Float_tok (float_of_string f) :: lexer lexbuf )
 # 571 "lexer.mml.ml"
 
   | 5 ->
 let
-# 30 "lexer.mml"
+# 32 "lexer.mml"
                         f
 # 577 "lexer.mml.ml"
 = Lexing.sub_lexeme lexbuf lexbuf.Lexing.lex_start_pos lexbuf.Lexing.lex_curr_pos in
-# 30 "lexer.mml"
+# 32 "lexer.mml"
                                         ( Float_tok (float_of_string f) :: lexer lexbuf )
 # 581 "lexer.mml.ml"
 
   | 6 ->
 let
-# 31 "lexer.mml"
+# 33 "lexer.mml"
                     n
 # 587 "lexer.mml.ml"
 = Lexing.sub_lexeme lexbuf lexbuf.Lexing.lex_start_pos lexbuf.Lexing.lex_curr_pos in
-# 31 "lexer.mml"
+# 33 "lexer.mml"
                                         ( Int_tok (int_of_string n) :: lexer lexbuf )
 # 591 "lexer.mml.ml"
 
   | 7 ->
 let
-# 32 "lexer.mml"
+# 34 "lexer.mml"
                    n
 # 597 "lexer.mml.ml"
 = Lexing.sub_lexeme lexbuf lexbuf.Lexing.lex_start_pos lexbuf.Lexing.lex_curr_pos in
-# 32 "lexer.mml"
+# 34 "lexer.mml"
                                         ( Int_tok (int_of_string n) :: lexer lexbuf )
 # 601 "lexer.mml.ml"
 
   | 8 ->
-# 33 "lexer.mml"
+# 35 "lexer.mml"
                                         ( Plus_tok :: lexer lexbuf )
 # 606 "lexer.mml.ml"
 
   | 9 ->
-# 34 "lexer.mml"
+# 36 "lexer.mml"
                                         ( Minus_tok :: lexer lexbuf )
 # 611 "lexer.mml.ml"
 
   | 10 ->
-# 35 "lexer.mml"
+# 37 "lexer.mml"
                                         ( Times_tok :: lexer lexbuf )
 # 616 "lexer.mml.ml"
 
   | 11 ->
-# 36 "lexer.mml"
+# 38 "lexer.mml"
                                         ( Div_tok :: lexer lexbuf )
 # 621 "lexer.mml.ml"
 
   | 12 ->
-# 37 "lexer.mml"
+# 39 "lexer.mml"
                                         ( Is_Eq_tok :: lexer lexbuf )
 # 626 "lexer.mml.ml"
 
   | 13 ->
-# 38 "lexer.mml"
+# 40 "lexer.mml"
                                         ( Is_Neq_tok :: lexer lexbuf )
 # 631 "lexer.mml.ml"
 
   | 14 ->
-# 39 "lexer.mml"
+# 41 "lexer.mml"
                                         ( Less_tok :: lexer lexbuf )
 # 636 "lexer.mml.ml"
 
   | 15 ->
-# 40 "lexer.mml"
+# 42 "lexer.mml"
                                         ( Greater_tok :: lexer lexbuf )
 # 641 "lexer.mml.ml"
 
   | 16 ->
-# 41 "lexer.mml"
+# 43 "lexer.mml"
                                         ( Leq_tok :: lexer lexbuf )
 # 646 "lexer.mml.ml"
 
   | 17 ->
-# 42 "lexer.mml"
+# 44 "lexer.mml"
                                         ( Geq_tok :: lexer lexbuf )
 # 651 "lexer.mml.ml"
 
   | 18 ->
-# 43 "lexer.mml"
+# 45 "lexer.mml"
                                         ( Equal_tok :: lexer lexbuf )
 # 656 "lexer.mml.ml"
 
   | 19 ->
-# 44 "lexer.mml"
+# 46 "lexer.mml"
                                         ( If_tok :: lexer lexbuf )
 # 661 "lexer.mml.ml"
 
   | 20 ->
-# 45 "lexer.mml"
+# 47 "lexer.mml"
                                         ( Else_tok :: lexer lexbuf )
 # 666 "lexer.mml.ml"
 
   | 21 ->
-# 46 "lexer.mml"
+# 48 "lexer.mml"
                                         ( Lparen_tok :: lexer lexbuf )
 # 671 "lexer.mml.ml"
 
   | 22 ->
-# 47 "lexer.mml"
+# 49 "lexer.mml"
                                         ( Rparen_tok :: lexer lexbuf )
 # 676 "lexer.mml.ml"
 
   | 23 ->
-# 48 "lexer.mml"
+# 50 "lexer.mml"
                                         ( Power_tok :: lexer lexbuf )
 # 681 "lexer.mml.ml"
 
   | 24 ->
-# 49 "lexer.mml"
+# 51 "lexer.mml"
                                         ( Bool_tok true :: lexer lexbuf )
 # 686 "lexer.mml.ml"
 
   | 25 ->
-# 50 "lexer.mml"
+# 52 "lexer.mml"
                                         ( Bool_tok false :: lexer lexbuf )
 # 691 "lexer.mml.ml"
 
   | 26 ->
-# 51 "lexer.mml"
+# 53 "lexer.mml"
                                         ( Col_tok :: lexer lexbuf )
 # 696 "lexer.mml.ml"
 
   | 27 ->
-# 52 "lexer.mml"
+# 54 "lexer.mml"
                                         ( Exit_tok :: lexer lexbuf )
 # 701 "lexer.mml.ml"
 
   | 28 ->
 let
-# 53 "lexer.mml"
+# 55 "lexer.mml"
                 i
 # 707 "lexer.mml.ml"
 = Lexing.sub_lexeme lexbuf lexbuf.Lexing.lex_start_pos lexbuf.Lexing.lex_curr_pos in
-# 53 "lexer.mml"
+# 55 "lexer.mml"
                                         ( Id_tok i :: lexer lexbuf )
 # 711 "lexer.mml.ml"
 
   | 29 ->
-# 54 "lexer.mml"
+# 56 "lexer.mml"
                                         ( [] )
 # 716 "lexer.mml.ml"
 
   | 30 ->
-# 55 "lexer.mml"
+# 57 "lexer.mml"
                                         ( lexer lexbuf )
 # 721 "lexer.mml.ml"
 
@@ -727,17 +727,17 @@ and comment1 lexbuf =
 and __ocaml_lex_comment1_rec lexbuf __ocaml_lex_state =
   match Lexing.engine __ocaml_lex_tables __ocaml_lex_state lexbuf with
       | 0 ->
-# 58 "lexer.mml"
+# 60 "lexer.mml"
                                ( comment2 lexbuf )
 # 733 "lexer.mml.ml"
 
   | 1 ->
-# 59 "lexer.mml"
+# 61 "lexer.mml"
                                ( lexer lexbuf )
 # 738 "lexer.mml.ml"
 
   | 2 ->
-# 60 "lexer.mml"
+# 62 "lexer.mml"
                                ( comment1 lexbuf )
 # 743 "lexer.mml.ml"
 
@@ -749,12 +749,12 @@ and comment2 lexbuf =
 and __ocaml_lex_comment2_rec lexbuf __ocaml_lex_state =
   match Lexing.engine __ocaml_lex_tables __ocaml_lex_state lexbuf with
       | 0 ->
-# 63 "lexer.mml"
+# 65 "lexer.mml"
                                ( comment1 lexbuf )
 # 755 "lexer.mml.ml"
 
   | 1 ->
-# 64 "lexer.mml"
+# 66 "lexer.mml"
                                ( comment2 lexbuf )
 # 760 "lexer.mml.ml"
 
@@ -763,7 +763,7 @@ and __ocaml_lex_comment2_rec lexbuf __ocaml_lex_state =
 
 ;;
 
-# 66 "lexer.mml"
+# 68 "lexer.mml"
  
     let tokenize s = lexer (Lexing.from_string s);;
 

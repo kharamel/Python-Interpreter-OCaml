@@ -1,4 +1,6 @@
-(* File: token.ml *)
+(* File: token.ml 
+  Author: Sushil Kharal
+*)
 
 type token = Int_tok of int
             | Float_tok of float
@@ -337,6 +339,7 @@ let rec get_comp_tok = fun lst ->
   | Geq_tok::xs -> Geq_tok
   | x::xs -> get_comp_tok xs;;
 
+(* Evaluate comparision statements ( ==, <, >, <=, >= ) *)
 let evaluate_comparision = fun tok_list -> fun symtable ->
   let to_skip = get_comp_tok tok_list in
   let lhs = skip_after tok_list to_skip in
@@ -367,27 +370,6 @@ let rec evaluate_if = fun tok_list -> fun symtable ->
     let ans = evaluate_comparision (skip_after xs Col_tok) symtable in
     if ans = Bool_tok true then true
     else false
-    (* let to_skip = get_comp_tok xs in 
-    let lhs = skip_after xs to_skip in
-    let rhs = skip_after (skip_until xs to_skip) (Col_tok) in 
-    if (to_skip = Is_Eq_tok) then
-      if (eval_exp lhs symtable) = (eval_exp rhs symtable) then true
-      else false
-    else if (to_skip = Is_Neq_tok) then
-      if (eval_exp lhs symtable) <> (eval_exp rhs symtable) then true
-      else false
-    else if (to_skip = Less_tok) then
-      if (eval_exp lhs symtable) < (eval_exp rhs symtable) then true
-      else false
-    else if (to_skip = Greater_tok) then
-      if (eval_exp lhs symtable) > (eval_exp rhs symtable) then true
-      else false
-    else if (to_skip = Leq_tok) then
-      if (eval_exp lhs symtable) <= (eval_exp rhs symtable) then true
-      else false
-    else
-      if (eval_exp lhs symtable) >= (eval_exp rhs symtable) then false
-      else true;; *)
 
 
 (* Assign value to the identifier *)

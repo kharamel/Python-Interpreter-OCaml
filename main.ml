@@ -1,4 +1,6 @@
-(* File main.ml *)
+(* File main.ml 
+  Author: Sushil Kharal
+*)
 
 #use "lexer.mml.ml";;
 

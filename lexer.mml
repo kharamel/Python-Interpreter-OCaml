@@ -1,4 +1,6 @@
-(* File: lexer.mml *)
+(*  File: lexer.mml 
+    Author: Sushil Kharal
+*)
 
 {
 
